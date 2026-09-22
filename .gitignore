@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+*.egg
+build/
+dist/
+
+# C/CUDA build artifacts
+*.so
+*.o
+*.out
+!CMakeLists.txt
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Editors / tools
+.vscode/
+.ipynb_checkpoints
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+
+# Models / checkpoints
+*.pth
+!pretrained_models/droid.pth
+*.ckpt
+checkpoints/
+
+# TensorRT
+*.engine
+*.onnx
+*.data
+
+# Datasets / outputs
+data/
+datasets/
+outputs/
+output*
+runs/
+cache/
+*.log
+
+# Run dumps / media
+*.mp4
+*.png
+*.txt
+!euroc_groundtruth/*.txt
+!calib/*.txt
+
+# Misc
+tmp*
+
+# thirdparty/: eigen, lietorch_5090, simple-knn, Sophus and glm are submodules
+# (gitlinks + .gitmodules); diff-gaussian-rasterization is a patched fork with no
+# upstream URL, so its source is vendored here. Do not ignore this tree -- a clone
+# with an empty thirdparty/ cannot build.

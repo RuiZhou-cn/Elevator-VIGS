@@ -1,0 +1,33 @@
+# A config holds what differs between datasets: the sensor (IMU noise model, camera-IMU
+# extrinsics, time units and offset), the IMU-init keyframe and loop closure. The algorithm
+# hyper-parameters shared by every dataset live in vigs/config_defaults.py; a key given here
+# overrides its default.
+Dataset:
+  pcd_downsample: 64      # pixel stride of the Gaussians seeded from a keyframe
+  scale_multiplier: 2.0   # initial metric-scale guess before the IMU init: mean inverse depth x this
+
+IMU:
+  frequency: 200
+  accelerometer_noise_density: 0.0028
+  accelerometer_random_walk:   0.00086
+  gyroscope_noise_density:     0.00016
+  gyroscope_random_walk:       0.000022
+  imu_time_offset: 0.0
+  rgb_file_in_nanoseconds: true
+  imu_in_nanoseconds: true
+  init_g: [0.0, 0.0, -9.81]
+  # no Tcb_np: each sequence has its own extrinsics, read from this file relative to --imagedir
+  Tcb_file: ../extrinsics.txt
+
+Tracking:
+  frontend:
+    # keyframe index at which the inertial init fires (InitializeVeloBiasGdir) and from which
+    # IMU dead-reckoning seeds each new keyframe's pose
+    imu_late_init_from: 25
+  pgba:
+    active: True
+
+Training:
+  gs_defer_until_kf: 9    # the first keyframes are not mapped (the base system's setting for this set)
+
+# No elevator in this set: any ride the detector fires here is a false positive.

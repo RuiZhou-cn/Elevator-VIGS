@@ -1,0 +1,33 @@
+# A config holds what differs between datasets: the sensor (IMU noise model, camera-IMU
+# extrinsics, time units and offset), the IMU-init keyframe and loop closure. The algorithm
+# hyper-parameters shared by every dataset live in vigs/config_defaults.py; a key given here
+# overrides its default.
+Dataset:
+  pcd_downsample: 64      # pixel stride of the Gaussians seeded from a keyframe
+  scale_multiplier: 2.0   # initial metric-scale guess before the IMU init: mean inverse depth x this
+
+IMU:
+  frequency: 400
+  accelerometer_noise_density: 0.00207649074
+  accelerometer_random_walk:   0.00041327852
+  gyroscope_noise_density:     0.00020544166
+  gyroscope_random_walk:       1.110622e-05
+  imu_time_offset: 0.00252437791367
+  rgb_file_in_nanoseconds: true
+  imu_in_nanoseconds: true
+  init_g: [0.0, 0.0, -9.81]
+  Tcb_np:
+    - [0.9999654398038452, 0.007342326779113337, -0.003899927610975742, -0.027534314618518095]
+    - [-0.0073452195116216765, 0.9999727585590525, -0.0007279355223411334, -0.0030587146933711722]
+    - [0.0038944766308488753, 0.0007565561891287445, 0.9999921303062861, -0.023605118842939803]
+    - [  0.0,             0.0,             0.0,              1.0 ]
+
+Tracking:
+  frontend:
+    # keyframe index at which the inertial init fires (InitializeVeloBiasGdir) and from which
+    # IMU dead-reckoning seeds each new keyframe's pose
+    imu_late_init_from: 20
+  pgba:
+    active: True
+
+# No elevator in this set: any ride the detector fires here is a false positive.

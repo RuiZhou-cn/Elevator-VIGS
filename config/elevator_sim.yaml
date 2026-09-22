@@ -1,0 +1,38 @@
+# Elevator run config for the Isaac Sim captures in data/Elevator-VIGS/sim/. One
+# rig across every capture, so there is nothing per-sequence here: the evaluation reads each
+# capture's ground truth and events.json directly (eval_elevator_mono.py).
+#
+# A config holds what differs between datasets: the sensor (IMU noise model, camera-IMU
+# extrinsics, time units and offset), the IMU-init keyframe and loop closure. The algorithm
+# hyper-parameters shared by every dataset, the elevator detector's included, live in
+# vigs/config_defaults.py; a key given here overrides its default. The eval script reads this
+# file and never writes it back.
+Dataset:
+  pcd_downsample: 64      # pixel stride of the Gaussians seeded from a keyframe
+  scale_multiplier: 2.0   # initial metric-scale guess before the IMU init: mean inverse depth x this
+
+IMU:
+  frequency: 400
+  accelerometer_noise_density: 0.00207649074
+  accelerometer_random_walk:   0.00041327852
+  gyroscope_noise_density:     0.00020544166
+  gyroscope_random_walk:       1.110622e-05
+  # Camera-IMU time offset [s], added to the IMU stamps (vigs.py); the captures need none.
+  imu_time_offset: 0.0
+  rgb_file_in_nanoseconds: true
+  imu_in_nanoseconds: true
+  init_g: [0.0, 0.0, -9.81]
+  # Exact axis permutation of the simulated rig (cam -> body), as the capture exported it.
+  Tcb_np:
+    - [ -0.0,  -1.0,  -0.0,  -0.0 ]
+    - [ -0.0,  -0.0,  -1.0,   0.02]
+    - [  1.0,   0.0,   0.0,  -0.03]
+    - [  0.0,   0.0,   0.0,   1.0 ]
+
+Tracking:
+  frontend:
+    # keyframe index at which the inertial init fires (InitializeVeloBiasGdir) and from which
+    # IMU dead-reckoning seeds each new keyframe's pose
+    imu_late_init_from: 20
+  pgba:
+    active: True
